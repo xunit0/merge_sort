@@ -40,26 +40,43 @@ std::vector<int> merge_sort(std::vector<int>& v) {
 
 }
 
+// Build: make
+// Run:   ./app <N>
+#include <iostream>
+#include <vector>
+#include <cstdlib>   // rand, srand, atoi
+#include <ctime>     // time
+
+
 int main(int argc, char* argv[]) {
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <N>\n";
+        return 1;
+    }
 
+    int N = std::atoi(argv[1]);
+    if (N <= 0) {
+        std::cerr << "N must be a positive integer.\n";
+        return 1;
+    }
+
+    // Generate random data
+    std::srand((unsigned)std::time(nullptr));
     std::vector<int> input;
+    input.reserve(N);
+    for (int i = 0; i < N; ++i) {
+        input.push_back(std::rand() % 1000); // 0..99,999
+    }
 
-   for (int i = 1; i < argc; i++) {
-       input.push_back(std::stoi(argv[i]));
-   }
-
-
+    // Sort
     std::vector<int> sorted = merge_sort(input);
 
-    for (int i = 0; i < sorted.size(); ++i) {
+    // Print sorted numbers (space-separated)
+    for (int i = 0; i < (int)sorted.size(); ++i) {
         if (i) std::cout << ' ';
         std::cout << sorted[i];
     }
     std::cout << '\n';
-
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
-
-
 
