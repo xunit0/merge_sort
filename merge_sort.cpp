@@ -1,5 +1,29 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+#include <iomanip>
+
+void print_current_time_ms() {
+    using namespace std::chrono;
+
+    // Get current time point
+    auto now = system_clock::now();
+
+    // Break into seconds and milliseconds
+    auto now_ms = duration_cast<milliseconds>(now.time_since_epoch()) % 1000;
+    std::time_t now_time = system_clock::to_time_t(now);
+
+    // Convert to local time
+    std::tm* local_tm = std::localtime(&now_time);
+
+    // Print as HH:MM:SS.mmm
+    std::cout << "[TIME] "
+              << std::put_time(local_tm, "%H:%M:%S") << "."
+              << std::setfill('0') << std::setw(3) << now_ms.count()
+              << "\n";
+}
+
+
 
 std::vector<int> merge(std::vector<int> left, std::vector<int> right) {
     std::vector<int> output;
@@ -40,13 +64,6 @@ std::vector<int> merge_sort(std::vector<int>& v) {
 
 }
 
-// Build: make
-// Run:   ./app <N>
-#include <iostream>
-#include <vector>
-#include <cstdlib>   // rand, srand, atoi
-#include <ctime>     // time
-
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -68,8 +85,11 @@ int main(int argc, char* argv[]) {
         input.push_back(std::rand() % 1000); // 0..99,999
     }
 
+    print_current_time_ms();
     // Sort
     std::vector<int> sorted = merge_sort(input);
+
+    print_current_time_ms();
 
     // Print sorted numbers (space-separated)
     for (int i = 0; i < (int)sorted.size(); ++i) {
